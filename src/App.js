@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import "./style/App.css";
+import { getStarWarsMovies } from "./api/movie";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  MenuIcon,
+  Typography,
+  Button
+} from "@material-ui/core";
+
+import MoviesCard from "./components/movies-card";
+
+class App extends React.Component {
+  state = {
+    movies: [],
+    err: null
+  };
+
+  componentDidMount() {
+    getStarWarsMovies()
+      .then(moviesFromApi =>
+        this.setState(() => {
+          return {
+            movies: moviesFromApi
+          };
+        })
+      )
+      .catch();
+  }
+
+  render() {
+    return (
+      <>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">Star War Movies</Typography>
+          </Toolbar>
+        </AppBar>
+        {this.state.movies.map(myMovie => {
+          return <MoviesCard movie={myMovie} />;
+        })}
+      </>
+    );
+  }
 }
 
 export default App;
